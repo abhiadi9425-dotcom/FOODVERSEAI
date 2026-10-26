@@ -56,5 +56,15 @@ class Settings(BaseSettings):
     )
 
 
+# Populate from Streamlit secrets if running inside Streamlit Cloud
+try:
+    import streamlit as _st
+    if hasattr(_st, "secrets"):
+        for _k in ["GROQ_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "USDA_API_KEY", "LLM_PROVIDER", "VISION_PROVIDER", "SPEECH_PROVIDER", "SECRET_KEY"]:
+            if _k in _st.secrets:
+                os.environ[_k] = str(_st.secrets[_k])
+except Exception:
+    pass
+
 settings = Settings()
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)

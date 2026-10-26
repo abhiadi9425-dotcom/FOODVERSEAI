@@ -24,6 +24,18 @@ def get_ai_provider() -> BaseAIProvider:
     gemini_key = settings.GEMINI_API_KEY or os.environ.get("GEMINI_API_KEY", "").strip()
     openai_key = settings.OPENAI_API_KEY or os.environ.get("OPENAI_API_KEY", "").strip()
 
+    try:
+        import streamlit as _st
+        if hasattr(_st, "secrets"):
+            if not groq_key and "GROQ_API_KEY" in _st.secrets:
+                groq_key = str(_st.secrets["GROQ_API_KEY"]).strip()
+            if not gemini_key and "GEMINI_API_KEY" in _st.secrets:
+                gemini_key = str(_st.secrets["GEMINI_API_KEY"]).strip()
+            if not openai_key and "OPENAI_API_KEY" in _st.secrets:
+                openai_key = str(_st.secrets["OPENAI_API_KEY"]).strip()
+    except Exception:
+        pass
+
     if (settings.LLM_PROVIDER.lower() == "groq" or not settings.LLM_PROVIDER) and groq_key:
         try:
             return GroqProvider(api_key=groq_key)
@@ -69,6 +81,20 @@ def get_provider_status() -> Dict[str, Any]:
     gemini_key = bool(settings.GEMINI_API_KEY or os.environ.get("GEMINI_API_KEY", "").strip())
     openai_key = bool(settings.OPENAI_API_KEY or os.environ.get("OPENAI_API_KEY", "").strip())
     usda_key = bool(settings.USDA_API_KEY or os.environ.get("USDA_API_KEY", "").strip())
+    
+    try:
+        import streamlit as _st
+        if hasattr(_st, "secrets"):
+            if not groq_key:
+                groq_key = bool(_st.secrets.get("GROQ_API_KEY", "").strip())
+            if not gemini_key:
+                gemini_key = bool(_st.secrets.get("GEMINI_API_KEY", "").strip())
+            if not openai_key:
+                openai_key = bool(_st.secrets.get("OPENAI_API_KEY", "").strip())
+            if not usda_key:
+                usda_key = bool(_st.secrets.get("USDA_API_KEY", "").strip())
+    except Exception:
+        pass
     
     active_provider = "fallback"
     if groq_key:

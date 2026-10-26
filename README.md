@@ -233,7 +233,31 @@ VITE_API_URL="http://localhost:8000/api/v1"
 
 ---
 
-## 🚀 Deployment Guide (Render + Vercel)
+## ☁️ Deployment Option 1: Streamlit Community Cloud (Recommended 1-Click Python Deployment)
+
+FoodVerse AI can be deployed directly to **Streamlit Community Cloud** with all multimodal features, Groq vision, OpenCV keyframe extraction, and verified USDA nutrition enabled.
+
+### Deployment Steps:
+1. Log in to **[share.streamlit.io](https://share.streamlit.io/)** with your GitHub account.
+2. Click **New app**.
+3. Select your repository:
+   - **Repository**: `abhiadi9425-dotcom/FOODVERSEAI`
+   - **Branch**: `main`
+   - **Main file path**: `streamlit_app.py`
+4. Expand **Advanced settings...** and open the **Secrets** tab.
+5. Paste your Streamlit Secrets:
+   ```toml
+   LLM_PROVIDER = "groq"
+   GROQ_API_KEY = "your_groq_api_key_here"
+   SECRET_KEY = "foodverse-production-secure-key-streamlit-cloud"
+   ```
+6. Click **Deploy!**
+   - Streamlit Cloud installs dependencies from `requirements.txt` and system packages from `packages.txt`.
+   - Your application will be live at `https://<your-app-name>.streamlit.app`!
+
+---
+
+## 🚀 Deployment Option 2: Render (Backend) + Vercel (Frontend)
 
 ### Step 1: Push Code to Your GitHub Repository
 1. Initialize or check your git repository:
