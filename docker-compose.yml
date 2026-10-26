@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./foodverse.db
+      - SECRET_KEY=prod-secret-foodverse-replace-in-production-2026
+      - FRONTEND_ORIGIN=http://localhost:5173,http://localhost:3000,http://localhost:80
+      - LLM_PROVIDER=groq
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_db:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend_uploads:
+  backend_db:
